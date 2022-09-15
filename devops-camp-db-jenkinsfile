@@ -36,10 +36,11 @@ pipeline {
                   steps {
                       echo "Building database image"
                       //TODO: build docker image & push to Harbor
-                      withCredentials([usernameColonPassword(credentialsId: '<YOUR CREDENTIAL ID NAME>', variable: 'HARBOR-AUTH')]) {
+                      //Test
+                      withCredentials([usernameColonPassword(credentialsId: 'rbeecham-harbor-auth', variable: 'HARBOR-AUTH')]) {
                           script {
                               sh 'docker build -t $DB_IMAGE_NAME-$COMMIT_HASH -f ./db/Dockerfile ./afs-labs-student'
-                              docker.withRegistry('https://$HARBOR_REGISTRY', '<YOUR CREDENTIAL ID NAME>') {
+                              docker.withRegistry('https://$HARBOR_REGISTRY', 'rbeecham-harbor-auth') {
                                   sh 'docker tag $DB_IMAGE_NAME-$COMMIT_HASH $HARBOR_REGISTRY/$HARBOR_PROJECT/$DB_IMAGE_NAME:$COMMIT_HASH-$PIPELINE_HASH'
                                   sh 'docker push $HARBOR_REGISTRY/$HARBOR_PROJECT/$DB_IMAGE_NAME:$COMMIT_HASH-$PIPELINE_HASH'
                               }
